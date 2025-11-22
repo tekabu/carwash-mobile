@@ -38,14 +38,25 @@ const phases = [
   },
 ];
 
-export default function ProgressScreen() {
+export default function ProgressScreen({ navigation, route }) {
   const [phaseIndex, setPhaseIndex] = useState(0);
+  const customerType = route?.params?.customerType ?? 'guest';
 
   const currentPhase = phases[phaseIndex];
   const completion = Math.min(100, (phaseIndex + 1) * 20);
+  const stepLabel = `STEP ${phaseIndex + 1} \u2022 ${completion}%`;
 
   const handleNextPhase = () => {
-    setPhaseIndex((prev) => Math.min(prev + 1, phases.length - 1));
+    if (phaseIndex >= phases.length - 1) {
+      if (customerType === 'member') {
+        navigation.navigate('Congrats', { customerType });
+      } else {
+        navigation.navigate('Balance', { customerType });
+      }
+      return;
+    }
+
+    setPhaseIndex((prev) => prev + 1);
   };
 
   return (
@@ -55,11 +66,12 @@ export default function ProgressScreen() {
         <TouchableOpacity style={styles.iconWrap} onPress={handleNextPhase} activeOpacity={0.85}>
           <Image source={currentPhase.image} style={styles.icon} resizeMode="contain" />
         </TouchableOpacity>
-        <Text style={styles.stepLabel}>{`STEP ${phaseIndex + 1} • ${completion}%`}</Text>
+        <Text style={styles.stepLabel}>{stepLabel}</Text>
         <Text style={styles.status}>{currentPhase.title}</Text>
         <View style={styles.progressTrack} accessibilityLabel="Progress bar">
           <View style={[styles.progressFill, { width: `${completion}%` }]} />
         </View>
+        <Text style={styles.helperText}>Tap the logo to advance through each phase.</Text>
       </View>
     </View>
   );
@@ -138,11 +150,16 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     backgroundColor: '#d9e2f0',
     overflow: 'hidden',
-    marginBottom: 10
   },
   progressFill: {
     height: '100%',
     borderRadius: 999,
     backgroundColor: '#1f7b2c',
+  },
+  helperText: {
+    marginTop: 10,
+    fontSize: 12,
+    color: '#4a4a4a',
+    textAlign: 'center',
   },
 });

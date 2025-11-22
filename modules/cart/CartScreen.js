@@ -3,13 +3,14 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useSelection } from '../select-base/SelectionContext';
 
-export default function CartScreen({ navigation }) {
+export default function CartScreen({ navigation, route }) {
+  const customerType = route?.params?.customerType ?? 'guest';
   const handleRedeem = () => {
     console.log('Redeem points');
   };
 
   const handleProceed = () => {
-    navigation.navigate('Checkout');
+    navigation.navigate('Checkout', { customerType });
   };
 
   const handleEditVehicle = () => {

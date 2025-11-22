@@ -10,6 +10,9 @@ import CheckoutScreen from './modules/checkout/CheckoutScreen';
 import ProgressScreen from './modules/progress/ProgressScreen';
 import SelectVehicleScreen from './modules/select-vehicle/SelectVehicleScreen';
 import SelectSoapScreen from './modules/select-soap/SelectSoapScreen';
+import CongratsScreen from './modules/congrats/CongratsScreen';
+import BalanceScreen from './modules/balance/BalanceScreen';
+import ThankYouScreen from './modules/thank_you/ThankYouScreen';
 import { SelectionProvider } from './modules/select-base/SelectionContext';
 
 const Stack = createNativeStackNavigator();
@@ -31,8 +34,11 @@ export default function App() {
           <Stack.Screen name="TapCard" component={TapCardScreen} />
           <Stack.Screen name="Checkout" component={CheckoutScreen} />
           <Stack.Screen name="Progress" component={ProgressScreen} />
+          <Stack.Screen name="Congrats" component={CongratsScreen} />
+          <Stack.Screen name="Balance" component={BalanceScreen} />
           <Stack.Screen name="SelectVehicle" component={SelectVehicleScreen} />
           <Stack.Screen name="SelectSoap" component={SelectSoapScreen} />
+          <Stack.Screen name="ThankYou" component={ThankYouScreen} />
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>

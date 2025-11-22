@@ -7,12 +7,12 @@ const { width } = Dimensions.get('window');
 export default function CustomerTypeScreen({ navigation }) {
   const handleGuestPress = () => {
     console.log('Guest selected');
-    navigation.navigate('Cart');
+    navigation.navigate('Cart', { customerType: 'guest' });
   };
 
   const handleMemberPress = () => {
     console.log('Member selected');
-    navigation.navigate('TapCard');
+    navigation.navigate('TapCard', { customerType: 'member' });
   };
 
   return (

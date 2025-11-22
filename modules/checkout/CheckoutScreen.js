@@ -11,9 +11,10 @@ import { useSelection } from '../select-base/SelectionContext';
 
 const { width } = Dimensions.get('window');
 
-export default function CheckoutScreen({ navigation }) {
+export default function CheckoutScreen({ navigation, route }) {
   const { selectedVehicle, selectedSoap } = useSelection();
   const [confirmVisible, setConfirmVisible] = useState(false);
+  const customerType = route?.params?.customerType ?? 'guest';
 
   const vehicleLabel = selectedVehicle ? selectedVehicle.title.toUpperCase() : 'SELECT VEHICLE';
   const vehicleSubtitle = selectedVehicle?.subtitle ?? '';
@@ -35,7 +36,7 @@ export default function CheckoutScreen({ navigation }) {
 
   const handleConfirm = () => {
     setConfirmVisible(false);
-    navigation.navigate('Progress');
+    navigation.navigate('Progress', { customerType });
   };
 
   const summaryItems = useMemo(

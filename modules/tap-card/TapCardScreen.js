@@ -3,9 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions } from 'rea
 
 const { width } = Dimensions.get('window');
 
-export default function TapCardScreen({ navigation }) {
+export default function TapCardScreen({ navigation, route }) {
+  const customerType = route?.params?.customerType ?? 'member';
+
   const handleReaderPress = () => {
-    navigation.navigate('Cart');
+    navigation.navigate('Cart', { customerType });
   };
 
   return (
