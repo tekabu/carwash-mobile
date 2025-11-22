@@ -1,16 +1,7 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useSelection } from '../select-base/SelectionContext';
-
-const { width } = Dimensions.get('window');
 
 export default function CartScreen({ navigation }) {
   const handleRedeem = () => {
@@ -18,7 +9,7 @@ export default function CartScreen({ navigation }) {
   };
 
   const handleProceed = () => {
-    console.log('Proceed to payment');
+    navigation.navigate('Checkout');
   };
 
   const handleEditVehicle = () => {
@@ -37,56 +28,60 @@ export default function CartScreen({ navigation }) {
 
   return (
     <View style={styles.page}>
-      <ScrollView contentContainerStyle={styles.main}>
-        <View style={[styles.card, styles.accountCard]}>
-          <View style={styles.account}> 
-            <View style={styles.icon}>
-              <FontAwesome name="user-circle" size={30} color="#4b4b4b" />
+      <View style={styles.cardWrapper}>
+        <View style={styles.cardContent}>
+          <Text style={styles.header}>Cart</Text>
+
+          <View style={[styles.childCard, styles.accountCard]}>
+            <View style={styles.account}>
+              <View style={styles.icon}>
+                <FontAwesome name="user-circle" size={30} color="#4b4b4b" />
+              </View>
+              <View style={styles.accountInfo}>
+                <Text style={styles.name}>Joshua Lacambra</Text>
+                <Text style={styles.balance}>Balance: P 70.00</Text>
+              </View>
             </View>
-            <View style={styles.accountInfo}>
-              <Text style={styles.name}>Joshua Lacambra</Text>
-              <Text style={styles.balance}>Balance: P 70.00</Text>
+          </View>
+
+          <View style={[styles.childCard, styles.pointsCard]}>
+            <View style={styles.pointsRow}>
+              <View style={styles.pointsDetails}>
+                <Text style={styles.pointsLabel}>Points:</Text>
+                <Text style={styles.pointsValue}>200 pts</Text>
+              </View>
+              <TouchableOpacity style={styles.redeemButton} onPress={handleRedeem} activeOpacity={0.8}>
+                <Text style={styles.redeemButtonText}>Redeem</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={[styles.childCard, styles.detailsCard]}>
+            <View style={styles.detailRow}>
+              <View style={styles.detailInfo}>
+                <Text style={styles.detailLabel}>Vehicle Type:</Text>
+                <Text style={styles.detailValue}>{vehicleLabel}</Text>
+              </View>
+              <TouchableOpacity onPress={handleEditVehicle} activeOpacity={0.7}>
+                <Text style={styles.editText}>Edit</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.detailRow}>
+              <View style={styles.detailInfo}>
+                <Text style={styles.detailLabel}>Soap Type:</Text>
+                <Text style={styles.detailValue}>{soapLabel}</Text>
+              </View>
+              <TouchableOpacity onPress={handleEditSoap} activeOpacity={0.7}>
+                <Text style={styles.editText}>Edit</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
 
-        <View style={[styles.card, styles.pointsCard]}>
-          <View style={styles.pointsRow}>
-            <View style={styles.pointsDetails}>
-              <Text style={styles.pointsLabel}>Points:</Text>
-              <Text style={styles.pointsValue}>200 pts</Text>
-            </View>
-            <TouchableOpacity style={styles.redeemButton} onPress={handleRedeem} activeOpacity={0.8}>
-              <Text style={styles.redeemButtonText}>Redeem</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={[styles.card, styles.detailsCard]}>
-          <View style={styles.detailRow}>
-            <View style={styles.detailInfo}>
-              <Text style={styles.detailLabel}>Vehicle Type:</Text>
-              <Text style={styles.detailValue}>{vehicleLabel}</Text>
-            </View>
-            <TouchableOpacity onPress={handleEditVehicle} activeOpacity={0.7}>
-              <Text style={styles.editText}>Edit</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.detailRow}>
-            <View style={styles.detailInfo}>
-              <Text style={styles.detailLabel}>Soap Type:</Text>
-              <Text style={styles.detailValue}>{soapLabel}</Text>
-            </View>
-            <TouchableOpacity onPress={handleEditSoap} activeOpacity={0.7}>
-              <Text style={styles.editText}>Edit</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-
-      <TouchableOpacity style={styles.proceedButton} onPress={handleProceed} activeOpacity={0.8}>
-        <Text style={styles.proceedButtonText}>Proceed</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.proceedButton} onPress={handleProceed} activeOpacity={0.8}>
+          <Text style={styles.proceedButtonText}>Proceed</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -98,23 +93,51 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     paddingHorizontal: 16,
     paddingBottom: 20,
-  },
-  main: {
     alignItems: 'center',
-    paddingBottom: 16,
   },
-  card: {
+  cardWrapper: {
+    flex: 1,
     width: '100%',
-    maxWidth: 460,
+    maxWidth: 480,
+    margin: 16,
     backgroundColor: '#fff',
-    borderRadius: 24,
-    padding: 20,
+    borderRadius: 30,
+    padding: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 16 },
     shadowOpacity: 0.08,
     shadowRadius: 25,
+    elevation: 8,
+    justifyContent: 'space-between',
+  },
+  cardContent: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+  header: {
+    backgroundColor: '#1f7b2c',
+    color: '#fff',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 999,
+    fontWeight: '600',
+    fontSize: 18,
+    alignSelf: 'flex-start',
+    marginBottom: 14,
+  },
+  childCard: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 26,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
     elevation: 6,
-    margin: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
   },
   account: {
     flexDirection: 'row',
@@ -217,10 +240,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   proceedButton: {
-    marginTop: 8,
-    alignSelf: 'center',
-    width: width - 32,
-    maxWidth: 460,
+    marginTop: 12,
+    alignSelf: 'stretch',
+    width: '100%',
     paddingVertical: 16,
     borderRadius: 999,
     backgroundColor: '#1f7b2c',
