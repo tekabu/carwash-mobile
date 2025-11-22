@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wash2Go Welcome</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: #fff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        padding: 2rem 1rem;
+      }
+
+      main {
+        width: min(480px, 100%);
+        text-align: center;
+        position: relative;
+        padding: 2rem 0 3rem;
+      }
+
+      .globe {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 44px;
+        height: 44px;
+        border: 2px solid #000;
+        border-radius: 50%;
+        display: grid;
+      }
+
+      .globe::before,
+      .globe::after {
+        content: "";
+        grid-area: 1 / 1;
+        border-radius: 50%;
+        border: 2px solid transparent;
+      }
+
+      .globe::before {
+        border-left-color: #000;
+        border-right-color: #000;
+      }
+
+      .globe::after {
+        border-top-color: #000;
+        border-bottom-color: #000;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 5vw, 2.7rem);
+        letter-spacing: 0.18em;
+        font-weight: 600;
+        margin: 0 0 1.4rem;
+      }
+
+      .logo-circle {
+        width: 240px;
+        height: 240px;
+        margin: 0 auto 2.5rem;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #f1f1f1 0%, #e4e4e4 60%, #fff 100%);
+        display: grid;
+        place-items: center;
+        position: relative;
+        overflow: hidden;
+        padding: 0.8rem;
+        box-shadow: inset 0 0 0 2px rgba(20, 20, 20, 0.1);
+      }
+
+      .logo-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+      }
+
+      .brand-heading {
+        font-size: clamp(2rem, 6vw, 2.8rem);
+        margin: 0;
+        font-weight: 700;
+      }
+
+      .tagline {
+        margin: 0.25rem 0 2.2rem;
+        font-size: 0.95rem;
+        color: #4a4a4a;
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: #1b7f1c;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 999px;
+        padding: 0.95rem 2.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        box-shadow: 0 10px 15px rgba(27, 127, 28, 0.35);
+        transition: transform 120ms ease, box-shadow 120ms ease;
+      }
+
+      .cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 20px rgba(27, 127, 28, 0.35);
+      }
+
+      .cta svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        stroke-width: 2.2;
+        fill: none;
+      }
+
+      @media (max-width: 480px) {
+        .logo-circle {
+          width: 200px;
+          height: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <span class="globe" aria-hidden="true"></span>
+      <h1>WELCOME</h1>
+      <div class="logo-circle">
+        <img src="logo.png" alt="Classy Kars logo" />
+      </div>
+      <p class="brand-heading">WASH2GO</p>
+      <p class="tagline">wash2go tagline</p>
+      <a class="cta" href="#">
+        Get Started
+        <svg viewBox="0 0 14 10" aria-hidden="true">
+          <path d="M1 5h11" />
+          <path d="M8 1l4 4-4 4" />
+        </svg>
+      </a>
+    </main>
+  </body>
+</html>
