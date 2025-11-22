@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "WASH2GO",
+    "slug": "wash2go",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,7 +19,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.nino.escalera.mobile"
+      "package": "com.wash2go.p14"
     },
     "web": {
       "favicon": "./assets/favicon.png"

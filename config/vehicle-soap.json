@@ -1,0 +1,48 @@
+{
+  "vehicles": [
+    {
+      "name": "small_1",
+      "title": "Small",
+      "subtitle": "Motorcycle",
+      "image": "assets/small_1.png"
+    },
+    {
+      "name": "small_2",
+      "title": "Small",
+      "subtitle": "Sedan",
+      "image": "assets/small_2.png"
+    },
+    {
+      "name": "medium_1",
+      "title": "Medium",
+      "subtitle": "SUV",
+      "image": "assets/medium_1.png"
+    },
+    {
+      "name": "medium_2",
+      "title": "Medium",
+      "subtitle": "Pick-up",
+      "image": "assets/medium_2.png"
+    },
+    {
+      "name": "large_1",
+      "title": "Large",
+      "subtitle": "Van",
+      "image": "assets/large_1.png"
+    }
+  ],
+  "soap": [
+    {
+      "name": "soap_1",
+      "title": "Basic",
+      "subtitle": "",
+      "image": "assets/soap_1.png"
+    },
+    {
+      "name": "soap_2",
+      "title": "Premium",
+      "subtitle": "",
+      "image": "assets/soap_2.png"
+    }
+  ]
+}

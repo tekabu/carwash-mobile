@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'rea
 
 const { width } = Dimensions.get('window');
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const handleGetStarted = () => {
-    console.log('Get Started pressed');
+    navigation.navigate('HowToStart');
   };
 
   return (
@@ -21,14 +21,10 @@ export default function HomeScreen() {
       </View>
 
       <Text style={styles.brandHeading}>WASH2GO</Text>
-      <Text style={styles.tagline}>wash2go tagline</Text>
+      {/* <Text style={styles.tagline}>wash2go tagline</Text> */}
 
       <TouchableOpacity style={styles.cta} onPress={handleGetStarted}>
         <Text style={styles.ctaText}>Get Started</Text>
-        <View style={styles.arrow}>
-          <View style={styles.arrowLine} />
-          <View style={styles.arrowHead} />
-        </View>
       </TouchableOpacity>
     </View>
   );
@@ -86,41 +82,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#1b7f1c',
     borderRadius: 999,
     paddingVertical: 15,
-    paddingHorizontal: 40,
+    paddingHorizontal: 100,
     shadowColor: '#1b7f1c',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.35,
     shadowRadius: 15,
     elevation: 10,
+    marginTop: 40
   },
   ctaText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
     marginRight: 8,
-  },
-  arrow: {
-    width: 16,
-    height: 16,
-    position: 'relative',
-  },
-  arrowLine: {
-    position: 'absolute',
-    left: 0,
-    top: 7,
-    width: 11,
-    height: 2,
-    backgroundColor: '#fff',
-  },
-  arrowHead: {
-    position: 'absolute',
-    right: 0,
-    top: 4,
-    width: 6,
-    height: 6,
-    borderTopWidth: 2,
-    borderRightWidth: 2,
-    borderColor: '#fff',
-    transform: [{ rotate: '45deg' }],
   },
 });

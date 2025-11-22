@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to Start</title>
+    <style>
+      :root {
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: #fff;
+        color: #0f0f0f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #f8f8f8;
+        display: flex;
+        justify-content: center;
+        padding: 0 1rem 2rem;
+      }
+
+      main {
+        width: min(480px, 100%);
+        background: #fff;
+        border-radius: 32px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .hero {
+        background: #1f7b2c;
+        height: 120px;
+        position: relative;
+        border-bottom-left-radius: 32px;
+        border-bottom-right-radius: 32px;
+      }
+
+      .hero::after {
+        content: "";
+        width: 82px;
+        height: 82px;
+        border-radius: 50%;
+        background: #e5e5e5;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero::before {
+        content: "i";
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: #1f7b2c;
+        position: absolute;
+        bottom: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #e5e5e5;
+        display: grid;
+        place-items: center;
+      }
+
+      .content {
+        padding: 4rem 2rem 2.5rem;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.9rem;
+        letter-spacing: 0.02em;
+      }
+
+      h2 {
+        margin: 1rem 0 0.6rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #3d3d3d;
+      }
+
+      ol {
+        padding-left: 1rem;
+        margin: 0;
+        text-align: left;
+        font-size: 1rem;
+        color: #1b1b1b;
+        line-height: 1.8;
+      }
+
+      ol li {
+        margin-bottom: 0.75rem;
+      }
+
+      .note {
+        font-size: 0.95rem;
+        color: #3c3c3c;
+      }
+
+      .continue-btn {
+        margin: auto 2rem 2rem;
+        width: calc(100% - 4rem);
+        padding: 0.95rem 0;
+        background: #1f7b2c;
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 12px 25px rgba(31, 123, 44, 0.35);
+      }
+
+      .continue-btn:active {
+        transform: translateY(1px);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="hero" aria-hidden="true"></div>
+      <div class="content">
+        <h1>HOW TO START</h1>
+        <h2>Guide on how to use:</h2>
+        <ol>
+          <li>Choose Member or Guest at the kiosk</li>
+          <li>Scan RFID (for members) or select vehicle type (for guests)</li>
+          <li>
+            Customize wash options.
+            <p class="note">Select Vehicle (for guests) &bull; Select type of soap: Basic & Premium</p>
+          </li>
+          <li>Top-up or redeem points if balance is low (members)</li>
+          <li>Tap the Start wash button to begin the carwash.</li>
+        </ol>
+      </div>
+      <button class="continue-btn">Continue</button>
+    </main>
+  </body>
+</html>
