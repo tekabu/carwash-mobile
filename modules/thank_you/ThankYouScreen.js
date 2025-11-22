@@ -24,7 +24,6 @@ export default function ThankYouScreen({ navigation }) {
       <TouchableOpacity style={styles.cta} onPress={handleContinue} activeOpacity={0.85}>
         <Text style={styles.ctaText}>Continue</Text>
       </TouchableOpacity>
-      <Text style={styles.footer}>Come Again</Text>
     </View>
   );
 }
@@ -89,11 +88,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginRight: 8,
-  },
-  footer: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginTop: 24,
-    letterSpacing: 1,
   },
 });

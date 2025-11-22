@@ -71,7 +71,6 @@ export default function ProgressScreen({ navigation, route }) {
         <View style={styles.progressTrack} accessibilityLabel="Progress bar">
           <View style={[styles.progressFill, { width: `${completion}%` }]} />
         </View>
-        <Text style={styles.helperText}>Tap the logo to advance through each phase.</Text>
       </View>
     </View>
   );
@@ -155,11 +154,5 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 999,
     backgroundColor: '#1f7b2c',
-  },
-  helperText: {
-    marginTop: 10,
-    fontSize: 12,
-    color: '#4a4a4a',
-    textAlign: 'center',
   },
 });

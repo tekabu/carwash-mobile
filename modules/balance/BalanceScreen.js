@@ -8,31 +8,20 @@ export default function BalanceScreen({ navigation }) {
 
   return (
     <View style={styles.page}>
-      <View style={styles.container}>
-        <View style={styles.headerPill}>
-          <Text style={styles.headerText}>Summary</Text>
+      <View style={styles.card}>
+        <View style={styles.checkCircle}>
+          <Text style={styles.checkMark}>{'\u2713'}</Text>
         </View>
-        <View style={styles.card}>
-          <View style={styles.checkCircle}>
-            <Text style={styles.checkMark}>{'\u2713'}</Text>
-          </View>
-          <Text style={styles.status}>Completed</Text>
-          <View style={styles.summaryRow}>
-            <View>
-              <Text style={styles.label}>Total</Text>
-              <Text style={styles.label}>Balance</Text>
-            </View>
-            <View>
-              <Text style={styles.value}>P200.00</Text>
-              <Text style={styles.value}>-----</Text>
-            </View>
-          </View>
-          <Text style={styles.note}>Please pay at the counter.</Text>
+        <Text style={styles.status}>Completed</Text>
+        <View style={styles.summaryRow}>
+          <Text style={styles.label}>Total Balance</Text>
+          <Text style={styles.value}>P200.00</Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleContinue} activeOpacity={0.85}>
-          <Text style={styles.buttonText}>Continue</Text>
-        </TouchableOpacity>
+        <Text style={styles.note}>Please pay at the counter.</Text>
       </View>
+      <TouchableOpacity style={styles.button} onPress={handleContinue} activeOpacity={0.85}>
+        <Text style={styles.buttonText}>Continue</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -45,35 +34,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-  container: {
-    width: '100%',
-    maxWidth: 460,
-    alignItems: 'center',
-  },
-  headerPill: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#1f7b2c',
-    borderRadius: 999,
-    paddingVertical: 8,
-    paddingHorizontal: 18,
-    marginBottom: 10,
-  },
-  headerText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
-  },
   card: {
     width: '100%',
+    maxWidth: 460,
     backgroundColor: '#fff',
     borderRadius: 32,
-    padding: 24,
+    padding: 28,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.08,
     shadowRadius: 28,
     elevation: 10,
+    marginBottom: 24,
   },
   checkCircle: {
     width: 80,
@@ -92,24 +65,23 @@ const styles = StyleSheet.create({
   status: {
     fontSize: 18,
     fontWeight: '700',
-    marginBottom: 14,
+    marginBottom: 18,
   },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    paddingHorizontal: 14,
-    marginBottom: 12,
+    paddingHorizontal: 12,
+    marginBottom: 8,
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '600',
     color: '#4a4a4a',
   },
   value: {
     fontSize: 16,
     fontWeight: '700',
-    textAlign: 'right',
   },
   note: {
     fontSize: 14,
@@ -130,7 +102,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.35,
     shadowRadius: 20,
     elevation: 10,
-    marginTop: 14,
   },
   buttonText: {
     color: '#fff',

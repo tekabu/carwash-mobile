@@ -25,6 +25,7 @@ export default function CheckoutScreen({ navigation, route }) {
 
   const vehicleImage = selectedVehicle?.assetSource ?? require('../../assets/logo.png');
   const soapImage = selectedSoap?.assetSource ?? require('../../assets/logo.png');
+  const hasBalance = customerType !== 'guest';
 
   const handleProceed = () => {
     setConfirmVisible(true);
@@ -77,10 +78,12 @@ export default function CheckoutScreen({ navigation, route }) {
               <Text style={styles.summaryLabel}>TOTAL:</Text>
               <Text style={styles.summaryValue}>{totalAmount}</Text>
             </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.balanceLabel}>Balance:</Text>
-              <Text style={styles.balanceValue}>{balanceAmount}</Text>
-            </View>
+            {hasBalance && (
+              <View style={styles.summaryRow}>
+                <Text style={styles.balanceLabel}>Balance:</Text>
+                <Text style={styles.balanceValue}>{balanceAmount}</Text>
+              </View>
+            )}
           </View>
         </View>
         <TouchableOpacity style={styles.proceedButton} onPress={handleProceed} activeOpacity={0.85}>
@@ -89,7 +92,8 @@ export default function CheckoutScreen({ navigation, route }) {
       </View>
 
       {confirmVisible && (
-        <View style={styles.confirmOverlay}>
+        <View style={styles.confirmBackdrop}>
+          <View style={styles.blurLayer} />
           <View style={styles.confirmCard}>
             <Text style={styles.confirmTitle}>Confirm checkout?</Text>
             <Text style={styles.confirmCopy}>Tap YES to start the wash or NO to keep editing.</Text>
@@ -242,13 +246,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  confirmOverlay: {
-    position: 'absolute',
-    inset: 0,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   confirmCard: {
     width: Math.min(360, width - 40),
     backgroundColor: '#fff',
@@ -300,5 +297,14 @@ const styles = StyleSheet.create({
   confirmText: {
     color: '#fff',
     fontWeight: '600',
+  },
+  confirmBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  blurLayer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255,255,255,0.6)',
   },
 });
