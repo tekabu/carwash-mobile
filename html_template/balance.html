@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Balance Summary</title>
+    <style>
+      :root {
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: #f5f5f5;
+        color: #0d0d0d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 2rem 1rem;
+        background: #f5f5f5;
+      }
+
+      main {
+        width: min(460px, 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      header {
+        background: #1f7b2c;
+        color: #fff;
+        border-radius: 999px;
+        padding: 0.65rem 1.5rem;
+        font-weight: 600;
+        width: fit-content;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 32px;
+        padding: 2rem 1.8rem 1.5rem;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .check {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #1f7b2c;
+        display: grid;
+        place-items: center;
+        margin: 0 auto;
+      }
+
+      .check::before {
+        content: "✓";
+        color: #fff;
+        font-size: 2.5rem;
+        font-weight: 700;
+      }
+
+      .status {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+
+      .summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        padding: 0 0.5rem;
+      }
+
+      .summary .label {
+        font-weight: 600;
+      }
+
+      .summary .value {
+        font-weight: 700;
+      }
+
+      .note {
+        font-size: 0.9rem;
+        color: #4a4a4a;
+      }
+
+      .start-btn {
+        width: 100%;
+        padding: 0.95rem 0;
+        border-radius: 999px;
+        border: none;
+        background: #1f7b2c;
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 12px 25px rgba(31, 123, 44, 0.35);
+      }
+
+      .start-btn:active {
+        transform: translateY(1px);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>Summary</header>
+      <section class="card">
+        <div class="check" aria-hidden="true"></div>
+        <p class="status">Completed</p>
+        <div class="summary">
+          <div>
+            <p class="label">Total</p>
+            <p class="label">Balance</p>
+          </div>
+          <div>
+            <p class="value">P200.00</p>
+            <p class="value">-----</p>
+          </div>
+        </div>
+        <p class="note">Please pay at the counter.</p>
+      </section>
+      <button class="start-btn">Start wash</button>
+    </main>
+  </body>
+</html>

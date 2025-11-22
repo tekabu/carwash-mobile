@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Congrats</title>
+    <style>
+      :root {
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: #ededed;
+        color: #0d0d0d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 2rem 1rem;
+        background: #ededed;
+      }
+
+      main {
+        width: min(460px, 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 1.8rem;
+        align-items: center;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 28px;
+        padding: 2.5rem 1.7rem;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      .card img {
+        width: 72px;
+        height: auto;
+        display: inline-block;
+      }
+
+      h1 {
+        margin: 1rem 0 0.35rem;
+        font-size: 1.8rem;
+      }
+
+      p {
+        margin: 0.2rem 0;
+        font-size: 1rem;
+        color: #3c3c3c;
+      }
+
+      .cta {
+        width: 100%;
+        border: none;
+        border-radius: 999px;
+        background: #1f7b2c;
+        color: #fff;
+        padding: 0.95rem 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 12px 25px rgba(31, 123, 44, 0.35);
+      }
+
+      .cta:active {
+        transform: translateY(1px);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <img src="congrats_icon.png" alt="Stacked coins icon" />
+        <h1>Congrats!</h1>
+        <p>You earned +20 points for this wash!</p>
+      </section>
+      <button class="cta">OK</button>
+    </main>
+  </body>
+</html>

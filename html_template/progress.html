@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carwash Progress</title>
+    <style>
+      :root {
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: #ededed;
+        color: #0e0e0e;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 2rem 1rem;
+        background: #ededed;
+      }
+
+      main {
+        width: min(460px, 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      header {
+        background: #1f7b2c;
+        color: #fff;
+        border-radius: 999px;
+        padding: 0.7rem 1.35rem;
+        font-weight: 600;
+        font-size: 1.2rem;
+        width: fit-content;
+      }
+
+      .icon-wrap {
+        width: clamp(160px, 40vw, 220px);
+        height: clamp(160px, 40vw, 220px);
+        background: #fff;
+        border-radius: 32px;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .icon-wrap img {
+        width: 70%;
+        height: auto;
+        display: block;
+      }
+
+      .status {
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .progress-track {
+        width: 100%;
+        height: 18px;
+        border-radius: 999px;
+        background: #cfd5e3;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: #1f7b2c;
+        width: 0%;
+        transition: width 200ms ease;
+      }
+
+      .progress-label {
+        font-weight: 600;
+        margin-top: 0.4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>Carwash Progress</header>
+      <div class="icon-wrap">
+        <img src="step_1.png" alt="Carwash spray icon" />
+      </div>
+      <p class="status">Pre-Rinsing the vehicle</p>
+      <div class="progress-track" aria-label="Progress bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p class="progress-label" id="progressLabel">0%</p>
+    </main>
+    <script>
+      const progressValue = 10; // update this value via JS to modify the bar
+      const fill = document.getElementById("progressFill");
+      const label = document.getElementById("progressLabel");
+
+      function updateProgress(value) {
+        const capped = Math.max(0, Math.min(value, 100));
+        fill.style.width = `${capped}%`;
+        label.textContent = `${capped}%`;
+      }
+
+      updateProgress(progressValue);
+    </script>
+  </body>
+</html>

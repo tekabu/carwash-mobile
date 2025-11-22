@@ -8,10 +8,11 @@ import {
   Dimensions,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useSelection } from '../select-base/SelectionContext';
 
 const { width } = Dimensions.get('window');
 
-export default function CartScreen() {
+export default function CartScreen({ navigation }) {
   const handleRedeem = () => {
     console.log('Redeem points');
   };
@@ -20,13 +21,27 @@ export default function CartScreen() {
     console.log('Proceed to payment');
   };
 
+  const handleEditVehicle = () => {
+    navigation.navigate('SelectVehicle');
+  };
+
+  const handleEditSoap = () => {
+    navigation.navigate('SelectSoap');
+  };
+
+  const { selectedVehicle, selectedSoap } = useSelection();
+  const vehicleLabel = selectedVehicle
+    ? `${selectedVehicle.title.toUpperCase()} (${selectedVehicle.subtitle})`
+    : 'Select vehicle';
+  const soapLabel = selectedSoap ? selectedSoap.title : 'Select soap';
+
   return (
     <View style={styles.page}>
       <ScrollView contentContainerStyle={styles.main}>
         <View style={[styles.card, styles.accountCard]}>
           <View style={styles.account}> 
             <View style={styles.icon}>
-              <FontAwesome name="user" style={styles.iconText} />
+              <FontAwesome name="user-circle" size={30} color="#4b4b4b" />
             </View>
             <View style={styles.accountInfo}>
               <Text style={styles.name}>Joshua Lacambra</Text>
@@ -48,17 +63,24 @@ export default function CartScreen() {
         </View>
 
         <View style={[styles.card, styles.detailsCard]}>
-          <View style={styles.detailBlock}>
-            <Text style={styles.detailLabel}>Vehicle Type:</Text>
-            <Text style={styles.detailValue}>SMALL (Sedan)</Text>
+          <View style={styles.detailRow}>
+            <View style={styles.detailInfo}>
+              <Text style={styles.detailLabel}>Vehicle Type:</Text>
+              <Text style={styles.detailValue}>{vehicleLabel}</Text>
+            </View>
+            <TouchableOpacity onPress={handleEditVehicle} activeOpacity={0.7}>
+              <Text style={styles.editText}>Edit</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.detailBlock}>
-            <Text style={styles.detailLabel}>Soap Type:</Text>
-            <Text style={styles.detailValue}>BASIC SOAP</Text>
+          <View style={styles.detailRow}>
+            <View style={styles.detailInfo}>
+              <Text style={styles.detailLabel}>Soap Type:</Text>
+              <Text style={styles.detailValue}>{soapLabel}</Text>
+            </View>
+            <TouchableOpacity onPress={handleEditSoap} activeOpacity={0.7}>
+              <Text style={styles.editText}>Edit</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.editTextWrapper} activeOpacity={0.6}>
-            <Text style={styles.editText}>Edit selections</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -106,10 +128,6 @@ const styles = StyleSheet.create({
     borderColor: '#dcdcdc',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  iconText: {
-    fontSize: 22,
-    color: '#4b4b4b',
   },
   accountInfo: {
     flex: 1,
@@ -171,11 +189,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   detailsCard: {
-    paddingBottom: 20,
+    paddingBottom: 1,
     justifyContent: 'center',
   },
-  detailBlock: {
-    marginBottom: 10,
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 18,
+  },
+  detailInfo: {
+    flex: 1,
+    marginRight: 14,
   },
   detailLabel: {
     fontSize: 13,
@@ -186,9 +211,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#111',
-  },
-  editTextWrapper: {
-    alignSelf: 'flex-end',
   },
   editText: {
     color: '#1f7b2c',

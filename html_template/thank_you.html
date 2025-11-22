@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thank You</title>
+    <style>
+      :root {
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        background: #ededed;
+        color: #0f0f0f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 2rem 1rem 3rem;
+        background: #ededed;
+      }
+
+      main {
+        width: min(460px, 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 6vw, 2.4rem);
+      }
+
+      .subtitle {
+        margin: 0;
+        font-size: 1rem;
+        color: #3d3d3d;
+        letter-spacing: 0.04em;
+      }
+
+      .logo-wrap {
+        width: clamp(240px, 70vw, 320px);
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        background: radial-gradient(circle at top, #f2f2f2 62%, #d9d9d9 100%);
+        position: relative;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+
+      .logo-wrap::after {
+        content: "";
+        position: absolute;
+        width: 110%;
+        height: 60%;
+        bottom: 24%;
+        background: #111827;
+        border-radius: 50%;
+        transform: translateY(30%);
+      }
+
+      .logo-wrap img {
+        width: 72%;
+        height: auto;
+        z-index: 1;
+      }
+
+      .footer {
+        font-size: 1.15rem;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Thank You</h1>
+      <p class="subtitle">for using WASH2GO</p>
+      <div class="logo-wrap" aria-hidden="true">
+        <img src="logo.png" alt="Classy Kars logo" />
+      </div>
+      <p class="footer">Please come again!</p>
+    </main>
+  </body>
+</html>

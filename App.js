@@ -6,25 +6,32 @@ import HowToStartScreen from './modules/how-to-start/HowToStartScreen';
 import CustomerTypeScreen from './modules/customer-type/CustomerTypeScreen';
 import CartScreen from './modules/cart/CartScreen';
 import TapCardScreen from './modules/tap-card/TapCardScreen';
+import SelectVehicleScreen from './modules/select-vehicle/SelectVehicleScreen';
+import SelectSoapScreen from './modules/select-soap/SelectSoapScreen';
+import { SelectionProvider } from './modules/select-base/SelectionContext';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="HowToStart" component={HowToStartScreen} />
-        <Stack.Screen name="CustomerType" component={CustomerTypeScreen} />
-        <Stack.Screen name="Cart" component={CartScreen} />
-        <Stack.Screen name="TapCard" component={TapCardScreen} />
-      </Stack.Navigator>
-      <StatusBar style="auto" />
-    </NavigationContainer>
+    <SelectionProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="HowToStart" component={HowToStartScreen} />
+          <Stack.Screen name="CustomerType" component={CustomerTypeScreen} />
+          <Stack.Screen name="Cart" component={CartScreen} />
+          <Stack.Screen name="TapCard" component={TapCardScreen} />
+          <Stack.Screen name="SelectVehicle" component={SelectVehicleScreen} />
+          <Stack.Screen name="SelectSoap" component={SelectSoapScreen} />
+        </Stack.Navigator>
+        <StatusBar style="auto" />
+      </NavigationContainer>
+    </SelectionProvider>
   );
 }
