@@ -1,0 +1,10 @@
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:s6
+    container_name: filebrowser
+    ports:
+      - 5051:80
+    volumes:
+      - ./build:/srv
+      - ./filebrowser/database:/database
+      - ./filebrowser/config:/config
