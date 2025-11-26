@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  Alert,
 } from 'react-native';
 import { useSelection } from '../select-base/SelectionContext';
+import customerService from '../../services/customerService';
 
 const { width } = Dimensions.get('window');
 
@@ -38,7 +40,9 @@ const extractAmount = (item) => {
 export default function CheckoutScreen({ navigation, route }) {
   const { selectedVehicle, selectedSoap } = useSelection();
   const [confirmVisible, setConfirmVisible] = useState(false);
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
   const customerType = route?.params?.customerType ?? 'guest';
+  const customerId = route?.params?.customerId;
   const routeBalance = route?.params?.balance;
   const normalizedBalance =
     typeof routeBalance === 'number'
@@ -72,9 +76,50 @@ export default function CheckoutScreen({ navigation, route }) {
     setConfirmVisible(false);
   };
 
-  const handleConfirm = () => {
-    setConfirmVisible(false);
-    navigation.navigate('Progress', { customerType });
+  const handleConfirm = async () => {
+    if (isProcessingCheckout) {
+      return;
+    }
+    if (!selectedVehicle?.id || !selectedSoap?.id) {
+      Alert.alert('Missing selections', 'Please select both vehicle and soap types.');
+      return;
+    }
+    if (!customerId) {
+      if (customerType === 'guest') {
+        setConfirmVisible(false);
+        navigation.navigate('Progress', { customerType });
+        return;
+      }
+      Alert.alert(
+        'Missing customer',
+        'Customer information is required to continue checkout.',
+      );
+      return;
+    }
+    try {
+      setIsProcessingCheckout(true);
+      const payload = await customerService.createCheckout({
+        customerId,
+        vehicleTypeId: selectedVehicle.id,
+        soapTypeId: selectedSoap.id,
+      });
+      const checkoutData = payload?.data ?? {};
+      const reference = checkoutData?.reference;
+      setConfirmVisible(false);
+      navigation.navigate('Progress', {
+        customerType,
+        checkoutReference: reference,
+        checkoutId: checkoutData?.checkout_id,
+        checkoutData,
+      });
+    } catch (error) {
+      Alert.alert(
+        'Checkout Failed',
+        error?.message || 'Unable to process checkout. Please try again.',
+      );
+    } finally {
+      setIsProcessingCheckout(false);
+    }
   };
 
   const summaryItems = useMemo(
@@ -146,11 +191,21 @@ export default function CheckoutScreen({ navigation, route }) {
             <Text style={styles.confirmTitle}>Confirm checkout?</Text>
             <Text style={styles.confirmCopy}>Tap YES to start the wash or NO to keep editing.</Text>
             <View style={styles.confirmActions}>
-              <TouchableOpacity style={styles.cancelButton} onPress={handleCancel} activeOpacity={0.8}>
+              <TouchableOpacity style={styles.cancelButton} onPress={handleCancel} activeOpacity={0.8} disabled={isProcessingCheckout}>
                 <Text style={styles.cancelText}>NO</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm} activeOpacity={0.8}>
-                <Text style={styles.confirmText}>YES</Text>
+              <TouchableOpacity
+                style={[
+                  styles.confirmButton,
+                  isProcessingCheckout && styles.disabledButton,
+                ]}
+                onPress={handleConfirm}
+                activeOpacity={0.8}
+                disabled={isProcessingCheckout}
+              >
+                <Text style={styles.confirmText}>
+                  {isProcessingCheckout ? 'PROCESSING...' : 'YES'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -345,6 +400,9 @@ const styles = StyleSheet.create({
   confirmText: {
     color: '#fff',
     fontWeight: '600',
+  },
+  disabledButton: {
+    opacity: 0.6,
   },
   confirmBackdrop: {
     ...StyleSheet.absoluteFillObject,

@@ -147,6 +147,7 @@ export default function CartScreen({ navigation, route }) {
     navigation.navigate('Checkout', {
       customerType,
       balance: safeBalance,
+      customerId,
     });
   };
 

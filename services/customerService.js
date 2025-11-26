@@ -18,6 +18,18 @@ const customerService = {
     }
     return api.post(`/api/customer/${customerId}/points/redeem`);
   },
+  async createCheckout({ customerId, vehicleTypeId, soapTypeId }) {
+    if (!customerId || !vehicleTypeId || !soapTypeId) {
+      const error = new Error('Missing checkout information.');
+      error.status = 400;
+      throw error;
+    }
+    return api.post('/api/customer/checkout', {
+      customer_id: customerId,
+      vehicle_type_id: vehicleTypeId,
+      soap_type_id: soapTypeId,
+    });
+  },
 };
 
 export default customerService;
