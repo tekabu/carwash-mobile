@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Image,
   Dimensions,
-  TouchableOpacity,
 } from 'react-native';
+import mqtt from 'mqtt';
+import customerService from '../../services/customerService';
 
 const { width } = Dimensions.get('window');
+const MQTT_BROKER_URL = 'wss://broker.emqx.io:8084/mqtt';
+const PROGRESS_TOPIC = '6UJaRjVcx1AFd9H6zfNky9DgKG08ix_carwash_progress';
 
 const phases = [
   {
@@ -40,37 +43,111 @@ const phases = [
 
 export default function ProgressScreen({ navigation, route }) {
   const [phaseIndex, setPhaseIndex] = useState(0);
+  const [isCompletingCheckout, setIsCompletingCheckout] = useState(false);
+  const [pointsAwarded, setPointsAwarded] = useState(null);
   const customerType = route?.params?.customerType ?? 'guest';
+  const checkoutReference = route?.params?.checkoutReference;
 
   const currentPhase = phases[phaseIndex];
   const completion = Math.min(100, (phaseIndex + 1) * 20);
   const stepLabel = `STEP ${phaseIndex + 1} \u2022 ${completion}%`;
 
-  const handleNextPhase = () => {
-    if (phaseIndex >= phases.length - 1) {
-      if (customerType === 'member') {
-        navigation.navigate('Congrats', { customerType });
-      } else {
-        navigation.navigate('Balance', { customerType });
+  useEffect(() => {
+    const clientId = `carwash_progress_${Date.now()}`;
+    const client = mqtt.connect(MQTT_BROKER_URL, {
+      clientId,
+      clean: true,
+      reconnectPeriod: 3000,
+      connectTimeout: 30000,
+      protocolVersion: 4,
+    });
+
+    const handleMessage = (topic, rawMessage) => {
+      if (topic !== PROGRESS_TOPIC || !rawMessage) {
+        return;
       }
+      const payload = rawMessage.toString().trim();
+      if (!payload) {
+        return;
+      }
+      if (payload.toLowerCase() === 'done') {
+        navigateToCompletion();
+        return;
+      }
+      const targetIndex = phases.findIndex((phase) => phase.key === payload);
+      if (targetIndex >= 0) {
+        setPhaseIndex((prev) => (prev === targetIndex ? prev : targetIndex));
+      }
+    };
+
+  const navigateToCompletion = async () => {
+    if (isCompletingCheckout) {
       return;
     }
-
-    setPhaseIndex((prev) => prev + 1);
+    try {
+      setIsCompletingCheckout(true);
+      let awardedPoints = null;
+      if (checkoutReference) {
+        const payload = await customerService.markCheckoutSuccess(checkoutReference);
+        const awarded = payload?.data?.points_awarded;
+        if (Number.isFinite(Number(awarded))) {
+          awardedPoints = Number(awarded);
+          setPointsAwarded(awardedPoints);
+        } else {
+          setPointsAwarded(null);
+        }
+      }
+      if (customerType === 'member') {
+        navigation.navigate('Congrats', {
+          customerType,
+          pointsAwarded: awardedPoints,
+        });
+        return;
+      }
+      navigation.navigate('Balance', { customerType });
+      return;
+    } catch (error) {
+      console.error('Failed to mark checkout success', error);
+    } finally {
+      setIsCompletingCheckout(false);
+    }
   };
+
+    client.on('connect', () => {
+      client.subscribe(PROGRESS_TOPIC, (err) => {
+        if (err) {
+          console.error('Failed to subscribe to progress topic', err);
+        }
+      });
+    });
+    client.on('message', handleMessage);
+    client.on('error', (error) => {
+      console.error('MQTT connection error', error);
+    });
+
+    return () => {
+      client.removeListener('message', handleMessage);
+      client.end(true);
+    };
+  }, []);
 
   return (
     <View style={styles.page}>
       <View style={styles.card}>
         <Text style={styles.header}>Carwash Progress</Text>
-        <TouchableOpacity style={styles.iconWrap} onPress={handleNextPhase} activeOpacity={0.85}>
+        <View style={styles.iconWrap}>
           <Image source={currentPhase.image} style={styles.icon} resizeMode="contain" />
-        </TouchableOpacity>
+        </View>
         <Text style={styles.stepLabel}>{stepLabel}</Text>
         <Text style={styles.status}>{currentPhase.title}</Text>
         <View style={styles.progressTrack} accessibilityLabel="Progress bar">
           <View style={[styles.progressFill, { width: `${completion}%` }]} />
         </View>
+        {customerType === 'member' && Number.isFinite(pointsAwarded) && (
+          <Text style={styles.pointsAwarded}>
+            Points awarded: {pointsAwarded.toFixed(2)}
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -154,5 +231,11 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 999,
     backgroundColor: '#1f7b2c',
+  },
+  pointsAwarded: {
+    marginTop: 12,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1f7b2c',
   },
 });

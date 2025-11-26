@@ -33,6 +33,14 @@ const customerService = {
     }
     return api.post('/api/customer/checkout', payload);
   },
+  async markCheckoutSuccess(reference) {
+    if (!reference) {
+      const error = new Error('Missing checkout reference.');
+      error.status = 400;
+      throw error;
+    }
+    return api.post(`/api/customer/checkout/${reference}/success`);
+  },
 };
 
 export default customerService;

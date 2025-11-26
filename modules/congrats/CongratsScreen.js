@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
 const iconSource = require('../../assets/congrats_icon.png');
 
-export default function CongratsScreen({ navigation }) {
+const formatPointsMessage = (points) => {
+  if (!Number.isFinite(points)) {
+    return 'You earned points for this wash!';
+  }
+  const value = points.toFixed(2).replace(/\.00$/, '');
+  return `You earned +${value} points for this wash!`;
+};
+
+export default function CongratsScreen({ navigation, route }) {
+  const awardedPoints = route?.params?.pointsAwarded;
+  const pointsMessage = useMemo(
+    () => formatPointsMessage(Number(awardedPoints)),
+    [awardedPoints],
+  );
   const handleProceed = () => {
     navigation.navigate('ThankYou');
   };
@@ -14,7 +27,7 @@ export default function CongratsScreen({ navigation }) {
       <View style={styles.card}>
         <Image source={iconSource} style={styles.icon} resizeMode="contain" />
         <Text style={styles.title}>Congrats!</Text>
-        <Text style={styles.copy}>You earned +20 points for this wash!</Text>
+        <Text style={styles.copy}>{pointsMessage}</Text>
       </View>
       <TouchableOpacity style={styles.cta} onPress={handleProceed} activeOpacity={0.8}>
         <Text style={styles.ctaText}>Proceed</Text>
