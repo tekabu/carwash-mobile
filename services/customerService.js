@@ -10,6 +10,14 @@ const customerService = {
     }
     return api.post(`/api/customer/rfid/${encodeURIComponent(trimmed)}/check`);
   },
+  async redeemPoints(customerId) {
+    if (!customerId) {
+      const error = new Error('Missing customer information.');
+      error.status = 400;
+      throw error;
+    }
+    return api.post(`/api/customer/${customerId}/points/redeem`);
+  },
 };
 
 export default customerService;
