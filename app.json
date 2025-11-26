@@ -27,7 +27,8 @@
     "extra": {
       "eas": {
         "projectId": "1253b4c9-17cd-4921-abbb-8a61e7921c85"
-      }
+      },
+      "apiBaseUrl": "https://admin.classykars.com"
     }
   }
 }

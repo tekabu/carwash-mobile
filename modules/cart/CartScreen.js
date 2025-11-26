@@ -3,8 +3,41 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useSelection } from '../select-base/SelectionContext';
 
+const formatCurrency = (value) => {
+  const numeric =
+    typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+        ? Number(value)
+        : NaN;
+  if (Number.isFinite(numeric)) {
+    return `P ${numeric.toFixed(2)}`;
+  }
+  if (value !== undefined && value !== null) {
+    return `P ${value}`;
+  }
+  return 'P 0.00';
+};
+
+const formatPoints = (value) => {
+  const numeric =
+    typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+        ? Number(value)
+        : NaN;
+  if (Number.isFinite(numeric)) {
+    return `${numeric.toFixed(2)} pts`;
+  }
+  if (value !== undefined && value !== null) {
+    return `${value} pts`;
+  }
+  return '0 pts';
+};
+
 export default function CartScreen({ navigation, route }) {
   const customerType = route?.params?.customerType ?? 'guest';
+  const customerData = route?.params?.customerData;
   const handleRedeem = () => {
     console.log('Redeem points');
   };
@@ -26,6 +59,9 @@ export default function CartScreen({ navigation, route }) {
     ? `${selectedVehicle.title.toUpperCase()} (${selectedVehicle.subtitle})`
     : 'Select vehicle';
   const soapLabel = selectedSoap ? selectedSoap.title : 'Select soap';
+  const displayName = customerData?.name || 'Guest Customer';
+  const displayBalance = formatCurrency(customerData?.balance);
+  const displayPoints = formatPoints(customerData?.points);
 
   return (
     <View style={styles.page}>
@@ -39,8 +75,8 @@ export default function CartScreen({ navigation, route }) {
                 <FontAwesome name="user-circle" size={30} color="#4b4b4b" />
               </View>
               <View style={styles.accountInfo}>
-                <Text style={styles.name}>Joshua Lacambra</Text>
-                <Text style={styles.balance}>Balance: P 70.00</Text>
+                <Text style={styles.name}>{displayName}</Text>
+                <Text style={styles.balance}>Balance: {displayBalance}</Text>
               </View>
             </View>
           </View>
@@ -49,7 +85,7 @@ export default function CartScreen({ navigation, route }) {
             <View style={styles.pointsRow}>
               <View style={styles.pointsDetails}>
                 <Text style={styles.pointsLabel}>Points:</Text>
-                <Text style={styles.pointsValue}>200 pts</Text>
+                <Text style={styles.pointsValue}>{displayPoints}</Text>
               </View>
               <TouchableOpacity style={styles.redeemButton} onPress={handleRedeem} activeOpacity={0.8}>
                 <Text style={styles.redeemButtonText}>Redeem</Text>
