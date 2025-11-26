@@ -48,11 +48,15 @@ async function request(endpoint, options = {}) {
 
   const url = `${baseUrl}${endpoint}`;
   const method = config.method?.toUpperCase() || 'GET';
-  console.log(`[api] ${method} ${endpoint}`);
+  const logLabel = `[api] ${method} ${endpoint}`;
+  console.log(`${logLabel} -> ${baseUrl || 'NO_BASE_URL'}`);
 
   try {
-    const response = await fetch(url, config);
-    console.log(`[api] ${method} ${endpoint} -> ${response.status}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const response = await fetch(url, { ...config, signal: controller.signal });
+    clearTimeout(timeoutId);
+    console.log(`${logLabel} [${response.status}]`);
     const data = await parseJson(response);
 
     if (!response.ok) {
@@ -69,7 +73,13 @@ async function request(endpoint, options = {}) {
     if (error.status) {
       throw error;
     }
-    console.error(`[api] ${method} ${endpoint} network error`, error);
+    if (error.name === 'AbortError') {
+      console.error(`${logLabel} timed out`);
+      const timeoutError = new Error('Request timed out. Please try again.');
+      timeoutError.status = 0;
+      throw timeoutError;
+    }
+    console.error(`${logLabel} network error`, error);
     const networkError = new Error(
       error?.message || 'Network error. Please check your connection.',
     );
