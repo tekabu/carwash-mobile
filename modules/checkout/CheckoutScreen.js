@@ -107,6 +107,7 @@ export default function CheckoutScreen({ navigation, route }) {
         checkoutReference: reference,
         checkoutId: checkoutData?.checkout_id,
         checkoutData,
+        totalAmount,
       });
     } catch (error) {
       Alert.alert(

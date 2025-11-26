@@ -47,6 +47,7 @@ export default function ProgressScreen({ navigation, route }) {
   const [pointsAwarded, setPointsAwarded] = useState(null);
   const customerType = route?.params?.customerType ?? 'guest';
   const checkoutReference = route?.params?.checkoutReference;
+  const totalAmount = route?.params?.totalAmount ?? 0;
 
   const currentPhase = phases[phaseIndex];
   const completion = Math.min(100, (phaseIndex + 1) * 20);
@@ -104,7 +105,7 @@ export default function ProgressScreen({ navigation, route }) {
         });
         return;
       }
-      navigation.navigate('Balance', { customerType });
+      navigation.navigate('Balance', { customerType, totalAmount });
       return;
     } catch (error) {
       console.error('Failed to mark checkout success', error);

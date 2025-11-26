@@ -1,7 +1,25 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-export default function BalanceScreen({ navigation }) {
+const formatCurrency = (value) => {
+  const numeric =
+    typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+        ? Number(value)
+        : NaN;
+  if (Number.isFinite(numeric)) {
+    return `P ${numeric.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  }
+  if (value !== undefined && value !== null) {
+    return `P ${value}`;
+  }
+  return 'P 0.00';
+};
+
+export default function BalanceScreen({ navigation, route }) {
+  const totalAmount = route?.params?.totalAmount;
+  const totalAmountDisplay = formatCurrency(totalAmount);
   const handleContinue = () => {
     navigation.navigate('ThankYou');
   };
@@ -15,7 +33,7 @@ export default function BalanceScreen({ navigation }) {
         <Text style={styles.status}>Completed</Text>
         <View style={styles.summaryRow}>
           <Text style={styles.label}>Total Balance</Text>
-          <Text style={styles.value}>P200.00</Text>
+          <Text style={styles.value}>{totalAmountDisplay}</Text>
         </View>
         <Text style={styles.note}>Please pay at the counter.</Text>
       </View>
