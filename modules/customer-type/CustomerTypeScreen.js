@@ -1,13 +1,49 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  Alert,
+} from 'react-native';
 import Svg, { Circle, Path, Rect, Line } from 'react-native-svg';
+import vehicleTypeService from '../../services/vehicleTypeService';
+import soapTypeService from '../../services/soapTypeService';
 
 const { width } = Dimensions.get('window');
 
 export default function CustomerTypeScreen({ navigation }) {
-  const handleGuestPress = () => {
-    console.log('Guest selected');
-    navigation.navigate('Cart', { customerType: 'guest' });
+  const [isLoadingGuest, setIsLoadingGuest] = useState(false);
+
+  const handleGuestPress = async () => {
+    if (isLoadingGuest) {
+      return;
+    }
+    setIsLoadingGuest(true);
+    try {
+      const [vehicleTypes, soapTypes] = await Promise.all([
+        vehicleTypeService.getAll(),
+        soapTypeService.getAll(),
+      ]);
+      navigation.navigate('Cart', {
+        customerType: 'guest',
+        customerData: {
+          name: 'Guest',
+          balance: 0,
+          points: 0,
+        },
+        vehicleTypes,
+        soapTypes,
+      });
+    } catch (error) {
+      Alert.alert(
+        'Guest checkout unavailable',
+        error?.message || 'Unable to load selections. Please try again.',
+      );
+    } finally {
+      setIsLoadingGuest(false);
+    }
   };
 
   const handleMemberPress = () => {
@@ -23,12 +59,13 @@ export default function CustomerTypeScreen({ navigation }) {
             style={styles.card}
             onPress={handleGuestPress}
             activeOpacity={0.7}
+            disabled={isLoadingGuest}
           >
             <Svg width="44" height="44" viewBox="0 0 64 64">
               <Circle cx="32" cy="24" r="10" stroke="#111" strokeWidth="2" fill="none" />
               <Path d="M14 56c0-11 9-20 20-20s20 9 20 20" stroke="#111" strokeWidth="2" fill="none" />
             </Svg>
-            <Text style={styles.cardText}>Guest</Text>
+            <Text style={styles.cardText}>{isLoadingGuest ? 'Loading...' : 'Guest'}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

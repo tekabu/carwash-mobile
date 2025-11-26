@@ -19,16 +19,19 @@ const customerService = {
     return api.post(`/api/customer/${customerId}/points/redeem`);
   },
   async createCheckout({ customerId, vehicleTypeId, soapTypeId }) {
-    if (!customerId || !vehicleTypeId || !soapTypeId) {
+    if (!vehicleTypeId || !soapTypeId) {
       const error = new Error('Missing checkout information.');
       error.status = 400;
       throw error;
     }
-    return api.post('/api/customer/checkout', {
-      customer_id: customerId,
+    const payload = {
       vehicle_type_id: vehicleTypeId,
       soap_type_id: soapTypeId,
-    });
+    };
+    if (customerId) {
+      payload.customer_id = customerId;
+    }
+    return api.post('/api/customer/checkout', payload);
   },
 };
 

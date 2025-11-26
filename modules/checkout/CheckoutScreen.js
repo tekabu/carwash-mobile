@@ -42,6 +42,7 @@ export default function CheckoutScreen({ navigation, route }) {
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
   const customerType = route?.params?.customerType ?? 'guest';
+  const isGuest = customerType === 'guest';
   const customerId = route?.params?.customerId;
   const routeBalance = route?.params?.balance;
   const normalizedBalance =
@@ -66,7 +67,7 @@ export default function CheckoutScreen({ navigation, route }) {
 
   const vehicleImage = selectedVehicle?.assetSource ?? require('../../assets/logo.png');
   const soapImage = selectedSoap?.assetSource ?? require('../../assets/logo.png');
-  const hasBalance = customerType !== 'guest';
+  const hasBalance = !isGuest;
 
   const handleProceed = () => {
     setConfirmVisible(true);
@@ -84,12 +85,7 @@ export default function CheckoutScreen({ navigation, route }) {
       Alert.alert('Missing selections', 'Please select both vehicle and soap types.');
       return;
     }
-    if (!customerId) {
-      if (customerType === 'guest') {
-        setConfirmVisible(false);
-        navigation.navigate('Progress', { customerType });
-        return;
-      }
+    if (!isGuest && !customerId) {
       Alert.alert(
         'Missing customer',
         'Customer information is required to continue checkout.',
@@ -99,7 +95,7 @@ export default function CheckoutScreen({ navigation, route }) {
     try {
       setIsProcessingCheckout(true);
       const payload = await customerService.createCheckout({
-        customerId,
+        customerId: isGuest ? undefined : customerId,
         vehicleTypeId: selectedVehicle.id,
         soapTypeId: selectedSoap.id,
       });
