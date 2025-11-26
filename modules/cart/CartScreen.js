@@ -143,7 +143,11 @@ export default function CartScreen({ navigation, route }) {
       );
       return;
     }
-    navigation.navigate('Checkout', { customerType });
+    const safeBalance = Number.isFinite(balanceValue) ? balanceValue : 0;
+    navigation.navigate('Checkout', {
+      customerType,
+      balance: safeBalance,
+    });
   };
 
   const handleEditVehicle = () => {

@@ -11,17 +11,54 @@ import { useSelection } from '../select-base/SelectionContext';
 
 const { width } = Dimensions.get('window');
 
+const formatCurrency = (value) => {
+  const numeric =
+    typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+        ? Number(value)
+        : NaN;
+  if (Number.isFinite(numeric)) {
+    return `P ${numeric.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  }
+  if (value !== undefined && value !== null) {
+    return `P ${value}`;
+  }
+  return 'P 0.00';
+};
+
+const extractAmount = (item) => {
+  if (!item) return 0;
+  const raw = item.price ?? item.amount ?? item.cost ?? item.rate;
+  const numeric =
+    typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw) : NaN;
+  return Number.isFinite(numeric) ? numeric : 0;
+};
+
 export default function CheckoutScreen({ navigation, route }) {
   const { selectedVehicle, selectedSoap } = useSelection();
   const [confirmVisible, setConfirmVisible] = useState(false);
   const customerType = route?.params?.customerType ?? 'guest';
+  const routeBalance = route?.params?.balance;
+  const normalizedBalance =
+    typeof routeBalance === 'number'
+      ? routeBalance
+      : typeof routeBalance === 'string'
+        ? Number(routeBalance)
+        : 0;
+  const balanceValue = Number.isFinite(normalizedBalance)
+    ? normalizedBalance
+    : 0;
 
   const vehicleLabel = selectedVehicle ? selectedVehicle.title.toUpperCase() : 'SELECT VEHICLE';
   const vehicleSubtitle = selectedVehicle?.subtitle ?? '';
   const soapLabel = selectedSoap ? selectedSoap.title : 'SELECT SOAP';
   const soapSubtitle = selectedSoap?.subtitle ?? '';
-  const totalAmount = 'P200.00';
-  const balanceAmount = 'P70.00';
+  const vehicleAmount = extractAmount(selectedVehicle);
+  const soapAmount = extractAmount(selectedSoap);
+  const totalAmount = vehicleAmount + soapAmount;
+  const totalAmountDisplay = formatCurrency(totalAmount);
+  const balanceAmount = formatCurrency(balanceValue);
 
   const vehicleImage = selectedVehicle?.assetSource ?? require('../../assets/logo.png');
   const soapImage = selectedSoap?.assetSource ?? require('../../assets/logo.png');
@@ -47,15 +84,26 @@ export default function CheckoutScreen({ navigation, route }) {
         label: vehicleLabel,
         subtitle: vehicleSubtitle,
         image: vehicleImage,
+        price: vehicleAmount,
       },
       {
         key: 'soap',
         label: soapLabel,
         subtitle: soapSubtitle,
         image: soapImage,
+        price: soapAmount,
       },
     ],
-    [vehicleLabel, vehicleSubtitle, soapLabel, soapSubtitle, vehicleImage, soapImage]
+    [
+      vehicleLabel,
+      vehicleSubtitle,
+      soapLabel,
+      soapSubtitle,
+      vehicleImage,
+      soapImage,
+      vehicleAmount,
+      soapAmount,
+    ]
   );
 
   return (
@@ -70,13 +118,13 @@ export default function CheckoutScreen({ navigation, route }) {
                 <Text style={styles.itemLabel}>{item.label}</Text>
                 {item.subtitle ? <Text style={styles.itemSub}>{`(${item.subtitle})`}</Text> : null}
               </View>
-              <Text style={styles.price}>{totalAmount}</Text>
+              <Text style={styles.price}>{formatCurrency(item.price)}</Text>
             </View>
           ))}
           <View style={styles.summary}>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>TOTAL:</Text>
-              <Text style={styles.summaryValue}>{totalAmount}</Text>
+              <Text style={styles.summaryValue}>{totalAmountDisplay}</Text>
             </View>
             {hasBalance && (
               <View style={styles.summaryRow}>
