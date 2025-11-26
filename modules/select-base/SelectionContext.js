@@ -5,12 +5,72 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import vehicleSoapConfig from '../../config/vehicle-soap.config';
+
+const placeholderImage = require('../../assets/logo.png');
 
 const SelectionContext = createContext(null);
 
-const defaultVehicles = vehicleSoapConfig.vehicles;
-const defaultSoap = vehicleSoapConfig.soap;
+const normalizeVehicleOptions = (items = []) =>
+  items
+    .filter(Boolean)
+    .map((item, index) => {
+      const title =
+        item.vehicle_type ?? item.title ?? item.name ?? `Vehicle ${index + 1}`;
+      const subtitle =
+        item.sub_title ??
+        item.subtitle ??
+        item.description ??
+        item.type ??
+        '';
+      const priceRaw =
+        item.amount ?? item.price ?? item.rate ?? item.cost ?? item.total;
+      const numeric =
+        typeof priceRaw === 'number'
+          ? priceRaw
+          : typeof priceRaw === 'string'
+            ? Number(priceRaw)
+            : 0;
+      return {
+        ...item,
+        id: item.id ?? item.name ?? `vehicle-${index}`,
+        name: item.name ?? item.slug ?? title,
+        title,
+        subtitle,
+        price: Number.isFinite(numeric) ? numeric : 0,
+        assetSource: item.image_url
+          ? { uri: item.image_url }
+          : item.assetSource ?? placeholderImage,
+      };
+    });
+
+const normalizeSoapOptions = (items = []) =>
+  items
+    .filter(Boolean)
+    .map((item, index) => {
+      const title =
+        item.soap_type ?? item.title ?? item.name ?? `Soap ${index + 1}`;
+      const subtitle =
+        item.sub_title ?? item.subtitle ?? item.description ?? '';
+      const priceRaw =
+        item.amount ?? item.price ?? item.rate ?? item.cost ?? item.total;
+      const numeric =
+        typeof priceRaw === 'number'
+          ? priceRaw
+          : typeof priceRaw === 'string'
+            ? Number(priceRaw)
+            : 0;
+      return {
+        ...item,
+        id: item.id ?? item.name ?? `soap-${index}`,
+        name: item.name ?? item.slug ?? title,
+        title,
+        subtitle,
+        price: Number.isFinite(numeric) ? numeric : 0,
+        assetSource: item.image_url
+          ? { uri: item.image_url }
+          : item.assetSource ?? placeholderImage,
+      };
+    });
 
 const findMatchingItem = (list, current) => {
   if (!Array.isArray(list) || !current) {
@@ -27,16 +87,13 @@ const findMatchingItem = (list, current) => {
 };
 
 export function SelectionProvider({ children }) {
-  const [vehicles, setVehicles] = useState(defaultVehicles);
-  const [soap, setSoap] = useState(defaultSoap);
-  const [selectedVehicle, setSelectedVehicle] = useState(defaultVehicles[0]);
-  const [selectedSoap, setSelectedSoap] = useState(defaultSoap[0]);
+  const [vehicles, setVehicles] = useState([]);
+  const [soap, setSoap] = useState([]);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [selectedSoap, setSelectedSoap] = useState(null);
 
-  const updateVehicles = useCallback((nextVehicles) => {
-    const normalized =
-      Array.isArray(nextVehicles) && nextVehicles.length
-        ? nextVehicles
-        : defaultVehicles;
+  const updateVehicles = useCallback((nextVehicles = []) => {
+    const normalized = normalizeVehicleOptions(nextVehicles);
     setVehicles(normalized);
     setSelectedVehicle((prev) => {
       if (!normalized.length) {
@@ -47,9 +104,8 @@ export function SelectionProvider({ children }) {
     });
   }, []);
 
-  const updateSoap = useCallback((nextSoap) => {
-    const normalized =
-      Array.isArray(nextSoap) && nextSoap.length ? nextSoap : defaultSoap;
+  const updateSoap = useCallback((nextSoap = []) => {
+    const normalized = normalizeSoapOptions(nextSoap);
     setSoap(normalized);
     setSelectedSoap((prev) => {
       if (!normalized.length) {

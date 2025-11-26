@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -19,27 +19,43 @@ export default function SelectionScreenBase({
   initialIndex = 0,
   onSelect,
 }) {
-  const boundedIndex = useMemo(
-    () => Math.max(0, Math.min(initialIndex, items.length - 1)),
-    [initialIndex, items.length]
-  );
+  const hasItems = items && items.length > 0;
+  const boundedIndex = useMemo(() => {
+    if (!hasItems) {
+      return 0;
+    }
+    return Math.max(0, Math.min(initialIndex, items.length - 1));
+  }, [initialIndex, items.length, hasItems]);
   const [activeIndex, setActiveIndex] = useState(boundedIndex);
-  const current = items[activeIndex];
+  useEffect(() => {
+    setActiveIndex(boundedIndex);
+  }, [boundedIndex]);
+  const current = hasItems ? items[activeIndex] : null;
 
   const handlePrev = () => {
+    if (!hasItems) {
+      return;
+    }
     setActiveIndex((prev) => (prev - 1 + items.length) % items.length);
   };
 
   const handleNext = () => {
+    if (!hasItems) {
+      return;
+    }
     setActiveIndex((prev) => (prev + 1) % items.length);
   };
 
   const handleSelect = () => {
+    if (!hasItems) {
+      return;
+    }
     onSelect(current);
     navigation.goBack();
   };
 
   const imageSource = current?.assetSource ?? require('../../assets/logo.png');
+  const selectDisabled = !hasItems;
 
   return (
     <View style={styles.container}>
@@ -51,7 +67,11 @@ export default function SelectionScreenBase({
       <Text style={styles.subtitle}>{subtitle}</Text>
 
       <View style={styles.carousel}>
-        <TouchableOpacity style={styles.navButton} onPress={handlePrev}>
+        <TouchableOpacity
+          style={[styles.navButton, !hasItems && styles.navButtonDisabled]}
+          onPress={handlePrev}
+          disabled={!hasItems}
+        >
           <Text style={styles.navSymbol}>&larr;</Text>
         </TouchableOpacity>
 
@@ -59,16 +79,38 @@ export default function SelectionScreenBase({
           <View style={styles.imageWrapper}>
             <Image source={imageSource} style={styles.image} resizeMode="contain" />
           </View>
-          <Text style={styles.cardLabel}>{current.title.toUpperCase()}</Text>
-          <Text style={styles.cardType}>{current.subtitle}</Text>
+          <Text style={styles.cardLabel}>
+            {current?.title ? current.title.toUpperCase() : 'Awaiting Data'}
+          </Text>
+          <Text style={styles.cardType}>
+            {current?.subtitle || (hasItems ? '' : 'No options available yet')}
+          </Text>
         </View>
 
-        <TouchableOpacity style={styles.navButton} onPress={handleNext}>
+        <TouchableOpacity
+          style={[styles.navButton, !hasItems && styles.navButtonDisabled]}
+          onPress={handleNext}
+          disabled={!hasItems}
+        >
           <Text style={styles.navSymbol}>&rarr;</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.selectButton} onPress={handleSelect} activeOpacity={0.85}>
+      {!hasItems && (
+        <Text style={styles.emptyState}>
+          No selections available. Please scan a card to load vehicle and soap types.
+        </Text>
+      )}
+
+      <TouchableOpacity
+        style={[
+          styles.selectButton,
+          selectDisabled && styles.selectButtonDisabled,
+        ]}
+        onPress={handleSelect}
+        activeOpacity={0.85}
+        disabled={selectDisabled}
+      >
         <Text style={styles.selectButtonText}>{buttonLabel}</Text>
       </TouchableOpacity>
     </View>
@@ -133,6 +175,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 14,
   },
+  navButtonDisabled: {
+    opacity: 0.35,
+  },
   navSymbol: {
     fontSize: 28,
     fontWeight: '600',
@@ -188,9 +233,17 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 12,
   },
+  selectButtonDisabled: {
+    opacity: 0.5,
+  },
   selectButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+  },
+  emptyState: {
+    marginBottom: 16,
+    color: '#666',
+    textAlign: 'center',
   },
 });

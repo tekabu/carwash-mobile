@@ -60,69 +60,6 @@ const extractAmount = (item) => {
   return Number.isFinite(numeric) ? numeric : 0;
 };
 
-const isSameOption = (a, b) => {
-  if (!a || !b) return false;
-  return (
-    (a.id && b.id && a.id === b.id) ||
-    (a.name && b.name && a.name === b.name) ||
-    (a.title && b.title && a.title === b.title)
-  );
-};
-
-const placeholderImage = require('../../assets/logo.png');
-
-const normalizeVehicleOptions = (items = []) =>
-  items
-    .filter(Boolean)
-    .map((item, index) => {
-      const title = item.vehicle_type ?? item.title ?? item.name ?? `Vehicle ${index + 1}`;
-      const subtitle = item.sub_title ?? item.subtitle ?? item.description ?? item.type ?? '';
-      const priceRaw = item.amount ?? item.price ?? item.rate ?? item.cost;
-      const numeric =
-        typeof priceRaw === 'number'
-          ? priceRaw
-          : typeof priceRaw === 'string'
-            ? Number(priceRaw)
-            : 0;
-      return {
-        ...item,
-        id: item.id ?? item.name ?? `vehicle-${index}`,
-        name: item.name ?? item.slug ?? title,
-        title,
-        subtitle,
-        price: Number.isFinite(numeric) ? numeric : 0,
-        assetSource: item.image_url
-          ? { uri: item.image_url }
-          : item.assetSource ?? placeholderImage,
-      };
-    });
-
-const normalizeSoapOptions = (items = []) =>
-  items
-    .filter(Boolean)
-    .map((item, index) => {
-      const title = item.soap_type ?? item.title ?? item.name ?? `Soap ${index + 1}`;
-      const subtitle = item.sub_title ?? item.subtitle ?? item.description ?? '';
-      const priceRaw = item.amount ?? item.price ?? item.rate ?? item.cost;
-      const numeric =
-        typeof priceRaw === 'number'
-          ? priceRaw
-          : typeof priceRaw === 'string'
-            ? Number(priceRaw)
-            : 0;
-      return {
-        ...item,
-        id: item.id ?? item.name ?? `soap-${index}`,
-        name: item.name ?? item.slug ?? title,
-        title,
-        subtitle,
-        price: Number.isFinite(numeric) ? numeric : 0,
-        assetSource: item.image_url
-          ? { uri: item.image_url }
-          : item.assetSource ?? placeholderImage,
-      };
-    });
-
 export default function CartScreen({ navigation, route }) {
   const customerType = route?.params?.customerType ?? 'guest';
   const customerData = route?.params?.customerData;
@@ -145,34 +82,12 @@ export default function CartScreen({ navigation, route }) {
   }, [customerData]);
 
   useEffect(() => {
-    if (vehicleTypes.length) {
-      const normalized = normalizeVehicleOptions(vehicleTypes);
-      setVehiclesList(normalized);
-      if (normalized.length) {
-        setSelectedVehicle((prev) => {
-          if (prev && normalized.some((item) => isSameOption(item, prev))) {
-            return prev;
-          }
-          return normalized[0];
-        });
-      }
-    }
-  }, [vehicleTypes, setVehiclesList, setSelectedVehicle]);
+    setVehiclesList(vehicleTypes);
+  }, [vehicleTypes, setVehiclesList]);
 
   useEffect(() => {
-    if (soapTypes.length) {
-      const normalized = normalizeSoapOptions(soapTypes);
-      setSoapList(normalized);
-      if (normalized.length) {
-        setSelectedSoap((prev) => {
-          if (prev && normalized.some((item) => isSameOption(item, prev))) {
-            return prev;
-          }
-          return normalized[0];
-        });
-      }
-    }
-  }, [soapTypes, setSoapList, setSelectedSoap]);
+    setSoapList(soapTypes);
+  }, [soapTypes, setSoapList]);
   const handleRedeem = () => {
     if (isRedeeming) {
       return;
