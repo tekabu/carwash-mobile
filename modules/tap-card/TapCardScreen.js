@@ -113,7 +113,7 @@ export default function TapCardScreen({ navigation, route }) {
 
       <TouchableOpacity
         style={styles.readerWrapper}
-        onPress={handleReaderPress}
+        // onPress={handleReaderPress}
         activeOpacity={0.85}
         accessibilityRole="button"
         accessibilityLabel="Tap RFID reader"
