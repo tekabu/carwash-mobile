@@ -118,6 +118,14 @@ export default function CartScreen({ navigation, route }) {
   };
 
   const handleProceed = () => {
+    const balanceValue = Number(currentCustomer?.balance);
+    if (!Number.isFinite(balanceValue) || balanceValue < totalAmount) {
+      Alert.alert(
+        'Insufficient Balance',
+        'Customer balance must be greater than or equal to the total amount.',
+      );
+      return;
+    }
     navigation.navigate('Checkout', { customerType });
   };
 
