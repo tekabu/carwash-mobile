@@ -56,6 +56,12 @@ export default function SelectionScreenBase({
 
   const imageSource = current?.assetSource ?? require('../../assets/logo.png');
   const selectDisabled = !hasItems;
+  const price = current?.price ?? 0;
+  const formattedPrice = Number.isFinite(price)
+    ? `P ${price
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+    : 'P 0.00';
 
   return (
     <View style={styles.container}>
@@ -85,6 +91,11 @@ export default function SelectionScreenBase({
           <Text style={styles.cardType}>
             {current?.subtitle || (hasItems ? '' : 'No options available yet')}
           </Text>
+          {hasItems && (
+            <Text style={styles.cardPrice} accessibilityLabel="Selection price">
+              {formattedPrice}
+            </Text>
+          )}
         </View>
 
         <TouchableOpacity
@@ -219,6 +230,12 @@ const styles = StyleSheet.create({
   cardType: {
     fontSize: 16,
     color: '#4b4b4b',
+  },
+  cardPrice: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1f7b2c',
   },
   selectButton: {
     width: '100%',
