@@ -111,11 +111,11 @@ export default function TapCardScreen({ navigation, route }) {
     <View style={styles.container}>
       <Text style={styles.title}>Tap Your Card</Text>
 
-      <TouchableOpacity
+      <View
         style={styles.readerWrapper}
         // onPress={handleReaderPress}
-        activeOpacity={0.85}
-        accessibilityRole="button"
+        // activeOpacity={0.85}
+        // accessibilityRole="button"
         accessibilityLabel="Tap RFID reader"
       >
         <View style={styles.reader}>
@@ -125,7 +125,7 @@ export default function TapCardScreen({ navigation, route }) {
             resizeMode="contain"
           />
         </View>
-      </TouchableOpacity>
+      </View>
 
       <Text style={styles.description}>Please tap your RFID card to continue.</Text>
       <Text style={styles.hint}>
